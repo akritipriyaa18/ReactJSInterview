@@ -7,21 +7,28 @@ import { useState } from "react"
 const Dropdown = ({buttonText, content}) => { 
 
     const [open, setOpen] = useState(false)
+    const [selectedItem, setSelectedItem] = useState(buttonText)
 
     const toggleDropdown = () => {
-        setOpen((open) => !open)
+        setOpen((prev) => !prev)
     }
 
-    const closeDropdown = () => {
-        setOpen(false);
-    };
+    const handleSelect = (itemText) => {
+        setSelectedItem(itemText)
+        setOpen(false)
+    }
 
 
-    return <div className="dropdown"><DropdownButton toggle={toggleDropdown} open={open}>{buttonText}</DropdownButton>
-    <DropdownContent>{React.Children.map(content, (child) => 
-                                   React.cloneElement(child, {onClick: closeDropdown})
-    )}</DropdownContent>
+    return (<div className="dropdown"><DropdownButton toggle={toggleDropdown} open={open}>{selectedItem}</DropdownButton>
+    {open && (
+        <DropdownContent>
+            {content.map((item, index) => ( 
+                                   <div key={index} onClick = {() => handleSelect(item)}>{item}</div>
+    ))}
+    </DropdownContent>
+    )}
     </div>
+)
 }
 
 export default Dropdown
